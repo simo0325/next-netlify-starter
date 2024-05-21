@@ -1,23 +1,37 @@
-import Head from 'next/head'
-import Header from '@components/Header'
-import Footer from '@components/Footer'
+document.addEventListener('DOMContentLoaded', (event) => {
+    const uploadImageInput = document.getElementById('uploadImageInput');
+    const uploadedImage = document.getElementById('uploadedImage');
+    const generatedImage = document.getElementById('generatedImage');
 
-export default function Home() {
-  return (
-    <div className="container">
-      <Head>
-        <title>Next.js Starter!</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    uploadImageInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
 
-      <main>
-        <Header title="Welcome to my app!" />
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
-        </p>
-      </main>
+        reader.onload = (e) => {
+            uploadedImage.src = e.target.result;
+            uploadedImage.style.display = 'block';
+            generatedImage.style.display = 'none';
+        };
 
-      <Footer />
-    </div>
-  )
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    });
+});
+
+function generateAIImage() {
+    // Questo è un esempio concettuale di chiamata API. Dovrebbe essere sostituito con una vera chiamata API.
+    const generatedImageUrl = 'https://api.example.com/generate-image'; // URL dell'API di generazione immagine
+
+    fetch(generatedImageUrl)
+        .then(response => response.json())
+        .then(data => {
+            const generatedImage = document.getElementById('generatedImage');
+            generatedImage.src = data.imageUrl;
+            generatedImage.style.display = 'block';
+            const uploadedImage = document.getElementById('uploadedImage');
+            uploadedImage.style.display = 'none';
+        })
+        .catch(error => console.error('Errore nella generazione dell\'immagine:', error));
 }
+
